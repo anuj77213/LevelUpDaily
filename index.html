@@ -1,0 +1,2334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RoutineRise — Master Your Schedule</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --surface: #13131a;
+  --card: #1a1a24;
+  --border: #2a2a3a;
+  --accent: #7c5cfc;
+  --accent2: #fc5c7d;
+  --accent3: #5cf0b0;
+  --accent4: #fcb85c;
+  --text: #f0f0f8;
+  --muted: #7070a0;
+  --glow: rgba(124,92,252,0.3);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── UTILS ── */
+.hidden { display: none !important; }
+.flex { display: flex; }
+.col { flex-direction: column; }
+.center { align-items: center; justify-content: center; }
+.gap8 { gap: 8px; }
+.gap12 { gap: 12px; }
+.gap16 { gap: 16px; }
+.gap24 { gap: 24px; }
+.bold { font-weight: 700; }
+.muted { color: var(--muted); }
+.accent { color: var(--accent); }
+.up { color: var(--accent3); }
+.down { color: var(--accent2); }
+
+/* ── LANGUAGE TOGGLE ── */
+.lang-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 9999;
+  display: flex;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  padding: 4px;
+  gap: 2px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+.lang-btn {
+  padding: 6px 16px;
+  border-radius: 24px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  background: transparent;
+  color: var(--muted);
+  transition: .2s;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: .3px;
+}
+.lang-btn.active {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(124,92,252,0.4);
+}
+
+/* ── BACKGROUND ── */
+.bg-mesh {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(124,92,252,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 90%, rgba(252,92,125,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 60% 40%, rgba(92,240,176,0.05) 0%, transparent 50%);
+}
+
+/* ── LOGIN PAGE ── */
+#loginPage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  padding: 20px;
+}
+.login-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 48px 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 0 80px rgba(124,92,252,0.15), 0 2px 0 rgba(255,255,255,0.05) inset;
+}
+.logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 4px;
+}
+.login-sub {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 36px;
+}
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.input-group label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+}
+.inp {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 13px 16px;
+  color: var(--text);
+  font-size: 15px;
+  font-family: 'DM Sans', sans-serif;
+  transition: .2s;
+  outline: none;
+}
+.inp:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--glow);
+}
+.btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .3px;
+  transition: .2s;
+  outline: none;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), #9b7dff);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(124,92,252,0.4);
+  margin-top: 8px;
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 28px rgba(124,92,252,0.5);
+}
+.btn-secondary {
+  background: var(--surface);
+  color: var(--accent);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover {
+  border-color: var(--accent);
+}
+.login-switch {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.login-switch span {
+  color: var(--accent);
+  cursor: pointer;
+  font-weight: 600;
+}
+.login-switch span:hover {
+  text-decoration: underline;
+}
+.err {
+  color: var(--accent2);
+  font-size: 13px;
+  margin-top: 8px;
+  text-align: center;
+}
+
+/* ── MAIN APP ── */
+#app {
+  display: none;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 240px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  z-index: 100;
+  transition: .3s;
+}
+.sidebar-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 32px;
+  padding: 0 8px;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: .2s;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.nav-item:hover {
+  background: var(--card);
+  color: var(--text);
+}
+.nav-item.active {
+  background: linear-gradient(135deg, rgba(124,92,252,.2), rgba(124,92,252,.05));
+  color: var(--accent);
+  font-weight: 600;
+}
+.nav-item .icon {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+}
+.sidebar-footer {
+  margin-top: auto;
+}
+.user-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background: var(--card);
+  border-radius: 12px;
+  cursor: pointer;
+}
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+  flex-shrink: 0;
+}
+.user-info {
+  flex: 1;
+  min-width: 0;
+}
+.user-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+.user-role {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ── MAIN CONTENT ── */
+.main {
+  margin-left: 240px;
+  min-height: 100vh;
+  padding: 32px;
+}
+
+/* ── PAGE HEADER ── */
+.page-header {
+  margin-bottom: 28px;
+}
+.page-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+}
+.page-sub {
+  color: var(--muted);
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+/* ── GRID ── */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+/* ── CARD ── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(255,255,255,.03), transparent);
+  pointer-events: none;
+}
+
+/* ── STAT CARDS ── */
+.stat-card { text-align: center; }
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 36px;
+  font-weight: 800;
+}
+.stat-label {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+}
+.stat-change {
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap { margin-bottom: 12px; }
+.progress-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.progress-name { font-size: 13px; font-weight: 600; }
+.progress-pct { font-size: 12px; color: var(--muted); }
+.progress-track {
+  height: 8px;
+  background: var(--surface);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 1s cubic-bezier(.4,0,.2,1);
+}
+.progress-time {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+/* ── CLOCK ── */
+.clock-display {
+  font-family: 'Syne', sans-serif;
+  font-size: 52px;
+  font-weight: 800;
+  text-align: center;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 2px;
+}
+.date-display {
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+/* ── TODAY SCHEDULE ── */
+.schedule-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: .2s;
+  position: relative;
+}
+.schedule-item:hover {
+  border-color: var(--accent);
+  transform: translateX(3px);
+}
+.schedule-item.active-slot {
+  border-color: var(--accent3);
+  background: rgba(92,240,176,.06);
+}
+.schedule-item.done { opacity: .5; }
+.schedule-item.done .schedule-name { text-decoration: line-through; }
+.slot-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.slot-time {
+  font-size: 12px;
+  color: var(--muted);
+  min-width: 80px;
+}
+.slot-name {
+  font-size: 14px;
+  font-weight: 600;
+  flex: 1;
+}
+.slot-dur {
+  font-size: 12px;
+  color: var(--muted);
+}
+.slot-check {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: .2s;
+  flex-shrink: 0;
+}
+.schedule-item.done .slot-check {
+  background: var(--accent3);
+  border-color: var(--accent3);
+  color: #000;
+}
+
+/* ── HABIT GRID ── */
+.habit-week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-top: 8px;
+}
+.habit-day-cell {
+  aspect-ratio: 1;
+  border-radius: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: .2s;
+}
+.habit-day-cell.done {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.habit-day-cell.partial {
+  background: rgba(124,92,252,.4);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* ── ADD FORM ── */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.form-full { margin-bottom: 12px; }
+.form-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: block;
+}
+select.inp option { background: var(--surface); }
+.color-dots {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+.color-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: .2s;
+}
+.color-dot.selected {
+  border-color: #fff;
+  transform: scale(1.15);
+}
+
+/* ── NOTIFICATION BADGE ── */
+.notif-badge {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  z-index: 9999;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 16px;
+  padding: 14px 20px;
+  max-width: 320px;
+  box-shadow: 0 8px 32px rgba(124,92,252,.4);
+  animation: slideIn .4s cubic-bezier(.175,.885,.32,1.275);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+@keyframes slideIn {
+  from { transform: translateX(120%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+.notif-text { flex: 1; }
+.notif-title { font-weight: 700; font-size: 14px; }
+.notif-body  { font-size: 12px; opacity: .85; }
+.notif-close { cursor: pointer; opacity: .7; font-size: 18px; }
+
+/* ── MONTH CALENDAR ── */
+.month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+}
+.month-day {
+  padding: 6px 4px;
+  text-align: center;
+  border-radius: 8px;
+  font-size: 12px;
+}
+.month-day.header {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 11px;
+}
+.month-day.filled {
+  background: rgba(124,92,252,.3);
+  color: var(--accent);
+  font-weight: 600;
+}
+.month-day.full {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+}
+.month-day.today-mark {
+  outline: 2px solid var(--accent3);
+}
+.month-day.empty { color: var(--border); }
+
+/* ── TABS ── */
+.tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 20px;
+}
+.tab {
+  flex: 1;
+  padding: 9px;
+  border-radius: 9px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  transition: .2s;
+}
+.tab.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ── STREAK FLAME ── */
+.streak-flame { font-size: 40px; text-align: center; }
+.streak-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 48px;
+  font-weight: 800;
+  text-align: center;
+  color: var(--accent4);
+}
+
+/* ── MOTIVATIONAL ── */
+.quote-card {
+  background: linear-gradient(135deg, rgba(124,92,252,.1), rgba(252,92,125,.08));
+  border-color: rgba(124,92,252,.3);
+}
+.quote-text {
+  font-size: 16px;
+  font-style: italic;
+  line-height: 1.6;
+}
+.quote-author {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+/* ── ALARM PULSE ── */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: .4; }
+}
+.pulsing { animation: pulse 1s infinite; }
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--muted);
+}
+.empty-state .icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+.empty-state p { font-size: 14px; }
+
+/* ── TIPS BOX ── */
+.tip-box {
+  background: rgba(92,240,176,.07);
+  border: 1px solid rgba(92,240,176,.2);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--accent3);
+  margin-bottom: 16px;
+}
+
+/* ── RING PROGRESS ── */
+.ring-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.ring-wrap svg { transform: rotate(-90deg); }
+.ring-center {
+  position: absolute;
+  text-align: center;
+}
+.ring-pct {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+}
+.ring-sub { font-size: 11px; color: var(--muted); }
+
+/* ── SECTION PAGES ── */
+.page-section { display: none; }
+.page-section.active { display: block; }
+
+/* ── RESPONSIVE ── */
+@media(max-width: 900px) {
+  .sidebar { width: 200px; }
+  .main { margin-left: 200px; padding: 20px; }
+  .grid4 { grid-template-columns: repeat(2, 1fr); }
+  .grid3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media(max-width: 680px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; padding: 16px; }
+  .grid2, .grid3, .grid4 { grid-template-columns: 1fr; }
+}
+.hamburger {
+  display: none;
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 200;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+}
+@media(max-width: 680px) { .hamburger { display: flex; } }
+</style>
+</head>
+<body>
+
+<div class="bg-mesh"></div>
+
+<!-- ══════════ LANGUAGE TOGGLE ══════════ -->
+<div class="lang-toggle">
+  <button class="lang-btn active" id="btnEn" onclick="setLang('en')">EN</button>
+  <button class="lang-btn"        id="btnHi" onclick="setLang('hi')">हि</button>
+</div>
+
+<!-- ══════════ LOGIN PAGE ══════════ -->
+<div id="loginPage">
+  <div class="login-box">
+    <div class="logo">RoutineRise 🚀</div>
+    <div class="login-sub"
+         data-en="Superpower your every day"
+         data-hi="अपने दिन को superpower दो">
+      Superpower your every day
+    </div>
+
+    <!-- Login Form -->
+    <div id="loginForm">
+      <div class="input-group">
+        <label data-en="Username / Email" data-hi="Username / Email">Username / Email</label>
+        <input class="inp" id="loginUser" type="text" placeholder="your@email.com" />
+      </div>
+      <div class="input-group">
+        <label data-en="Password" data-hi="पासवर्ड">Password</label>
+        <input class="inp" id="loginPass" type="password" placeholder="••••••••" />
+      </div>
+      <div class="err hidden" id="loginErr"
+           data-en="❌ Wrong username or password"
+           data-hi="❌ गलत username या password">
+        ❌ Wrong username or password
+      </div>
+      <button class="btn btn-primary" onclick="doLogin()"
+              data-en="Login →" data-hi="Login करें →">Login →</button>
+      <div class="login-switch">
+        <span data-en="New here? " data-hi="नया account? ">New here? </span>
+        <span onclick="showRegister()"
+              data-en="Register" data-hi="Register करें">Register</span>
+      </div>
+    </div>
+
+    <!-- Register Form -->
+    <div id="registerForm" class="hidden">
+      <div class="input-group">
+        <label data-en="Full Name" data-hi="पूरा नाम">Full Name</label>
+        <input class="inp" id="regName" type="text" placeholder="Rahul Sharma" />
+      </div>
+      <div class="input-group">
+        <label data-en="Email" data-hi="Email">Email</label>
+        <input class="inp" id="regEmail" type="email" placeholder="your@email.com" />
+      </div>
+      <div class="input-group">
+        <label data-en="Password (min 6 chars)" data-hi="Password (कम से कम 6 अक्षर)">Password (min 6 chars)</label>
+        <input class="inp" id="regPass" type="password" placeholder="Min 6 characters" />
+      </div>
+      <div class="err hidden" id="regErr"></div>
+      <button class="btn btn-primary" onclick="doRegister()"
+              data-en="Create Account →" data-hi="Account बनाएं →">Create Account →</button>
+      <div class="login-switch">
+        <span data-en="Already have account? " data-hi="पहले से account है? ">Already have account? </span>
+        <span onclick="showLogin()"
+              data-en="Login" data-hi="Login करें">Login</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MAIN APP ══════════ -->
+<div id="app">
+  <button class="hamburger" onclick="toggleSidebar()">☰</button>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-logo">RoutineRise 🚀</div>
+    <nav>
+      <div class="nav-item active" onclick="goTo('dashboard')">
+        <span class="icon">🏠</span>
+        <span data-en="Dashboard" data-hi="Dashboard">Dashboard</span>
+      </div>
+      <div class="nav-item" onclick="goTo('today')">
+        <span class="icon">📅</span>
+        <span data-en="Today's Schedule" data-hi="आज का Schedule">Today's Schedule</span>
+      </div>
+      <div class="nav-item" onclick="goTo('habits')">
+        <span class="icon">🔥</span>
+        <span data-en="Habits & Subjects" data-hi="Habits & Subjects">Habits & Subjects</span>
+      </div>
+      <div class="nav-item" onclick="goTo('analytics')">
+        <span class="icon">📊</span>
+        <span data-en="Growth Analytics" data-hi="Growth Analytics">Growth Analytics</span>
+      </div>
+      <div class="nav-item" onclick="goTo('calendar')">
+        <span class="icon">🗓️</span>
+        <span data-en="Monthly View" data-hi="Monthly View">Monthly View</span>
+      </div>
+      <div class="nav-item" onclick="goTo('settings')">
+        <span class="icon">⚙️</span>
+        <span data-en="Settings" data-hi="Settings">Settings</span>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="avatar" id="sidebarAvatar">R</div>
+        <div class="user-info">
+          <div class="user-name" id="sidebarName">Rahul</div>
+          <div class="user-role">
+            🔥 <span id="sidebarStreak">0</span>
+            <span data-en=" day streak" data-hi=" दिन streak"> day streak</span>
+          </div>
+        </div>
+        <span style="cursor:pointer;color:var(--muted)" onclick="doLogout()">↩</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main">
+
+    <!-- ── DASHBOARD ── -->
+    <div class="page-section active" id="sec-dashboard">
+      <div class="page-header">
+        <div class="page-title">
+          <span data-en="Good Morning! 👋 " data-hi="नमस्ते! 👋 ">Good Morning! 👋 </span>
+          <span id="dashName">Rahul</span>
+        </div>
+        <div class="page-sub"
+             data-en="One more step towards greatness today"
+             data-hi="आज भी greatness की तरफ एक कदम">
+          One more step towards greatness today
+        </div>
+      </div>
+
+      <!-- Clock -->
+      <div class="card" style="margin-bottom:20px; background:linear-gradient(135deg,rgba(124,92,252,.1),rgba(252,92,125,.07))">
+        <div class="clock-display" id="liveClock">00:00:00</div>
+        <div class="date-display"  id="liveDate"></div>
+        <div style="text-align:center; margin-top:12px;">
+          <span id="nextAlertBadge" style="font-size:13px; color:var(--accent4)"></span>
+        </div>
+      </div>
+
+      <!-- Stats Row -->
+      <div class="grid4" style="margin-bottom:20px">
+        <div class="card stat-card">
+          <div class="stat-num" id="statToday" style="color:var(--accent)">0%</div>
+          <div class="stat-label" data-en="Today's Progress" data-hi="आज का Progress">Today's Progress</div>
+        </div>
+        <div class="card stat-card">
+          <div class="stat-num streak-num" id="statStreak">0🔥</div>
+          <div class="stat-label" data-en="Day Streak" data-hi="Day Streak">Day Streak</div>
+        </div>
+        <div class="card stat-card">
+          <div class="stat-num" id="statConsistency" style="color:var(--accent3)">0%</div>
+          <div class="stat-label" data-en="This Month" data-hi="इस महीने">This Month</div>
+        </div>
+        <div class="card stat-card">
+          <div class="stat-num" id="statHabits" style="color:var(--accent2)">0</div>
+          <div class="stat-label" data-en="Active Habits" data-hi="Active Habits">Active Habits</div>
+        </div>
+      </div>
+
+      <div class="grid2" style="margin-bottom:20px">
+        <!-- Next Up -->
+        <div class="card">
+          <div style="font-family:'Syne',sans-serif; font-size:16px; font-weight:700; margin-bottom:16px"
+               data-en="⚡ Next Up Today" data-hi="⚡ अभी आगे क्या है">⚡ Next Up Today</div>
+          <div id="dashNextSlots"></div>
+        </div>
+        <!-- Quote + Tip -->
+        <div>
+          <div class="card quote-card" style="margin-bottom:16px">
+            <div class="quote-text" id="quoteText"></div>
+            <div class="quote-author" id="quoteAuthor"></div>
+          </div>
+          <div class="tip-box" id="dashTip">
+            💡 <strong>Tip:</strong>
+            <span data-en="Schedule your hardest subject in the morning — your brain is freshest then!"
+                  data-hi="सबसे hard subject को सुबह schedule करो — brain तब fresh होता है!">
+              Schedule your hardest subject in the morning — your brain is freshest then!
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Habit Progress Bars -->
+      <div class="card">
+        <div style="font-family:'Syne',sans-serif; font-size:16px; font-weight:700; margin-bottom:16px"
+             data-en="📈 Today's Habit Progress" data-hi="📈 आज की Habit Progress">
+          📈 Today's Habit Progress
+        </div>
+        <div id="dashHabitBars">
+          <div class="empty-state">
+            <div class="icon">➕</div>
+            <p data-en='Add Habits → go to "Habits &amp; Subjects"'
+               data-hi='Habits add करो → "Habits &amp; Subjects" में जाओ'>
+              Add Habits → go to "Habits &amp; Subjects"
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TODAY'S SCHEDULE ── -->
+    <div class="page-section" id="sec-today">
+      <div class="page-header">
+        <div class="page-title"
+             data-en="📅 Today's Schedule" data-hi="📅 आज का Schedule">📅 Today's Schedule</div>
+        <div class="page-sub" id="todayDateLabel"></div>
+      </div>
+
+      <div class="grid2">
+        <div>
+          <!-- Add Slot Form -->
+          <div class="card" style="margin-bottom:16px">
+            <div style="font-family:'Syne',sans-serif; font-size:15px; font-weight:700; margin-bottom:16px"
+                 data-en="➕ Add Time Slot" data-hi="➕ Time Slot Add करो">➕ Add Time Slot</div>
+            <div class="form-row">
+              <div>
+                <label class="form-label" data-en="Subject / Habit" data-hi="Subject / Habit">Subject / Habit</label>
+                <select class="inp" id="slotHabit" style="width:100%">
+                  <option value="" data-en="— Select —" data-hi="— चुनो —">— Select —</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label" data-en="Time" data-hi="समय">Time</label>
+                <input class="inp" id="slotTime" type="time" value="06:00" style="width:100%">
+              </div>
+            </div>
+            <div class="form-row">
+              <div>
+                <label class="form-label" data-en="Duration (min)" data-hi="Duration (मिनट)">Duration (min)</label>
+                <input class="inp" id="slotDur" type="number" value="60" min="5" max="480" style="width:100%">
+              </div>
+              <div>
+                <label class="form-label" data-en="Days" data-hi="दिन">Days</label>
+                <select class="inp" id="slotDays" style="width:100%">
+                  <option value="all"     data-en="Every Day"   data-hi="हर दिन">Every Day</option>
+                  <option value="weekday" data-en="Weekdays"    data-hi="Weekdays (Mon-Fri)">Weekdays</option>
+                  <option value="weekend" data-en="Weekend"     data-hi="Weekend">Weekend</option>
+                  <option value="today"   data-en="Only Today"  data-hi="सिर्फ आज">Only Today</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="addSlot()"
+                    data-en="+ Add Slot" data-hi="+ Slot Add करें">+ Add Slot</button>
+          </div>
+
+          <!-- Alarm Card -->
+          <div class="card">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px">
+              <div style="font-family:'Syne',sans-serif; font-size:15px; font-weight:700"
+                   data-en="⏰ Alarm / Reminder" data-hi="⏰ Alarm / Reminder">⏰ Alarm / Reminder</div>
+              <button class="btn btn-secondary" style="width:auto; padding:8px 14px; font-size:12px"
+                      onclick="testAlarm()"
+                      data-en="🔔 Test" data-hi="🔔 Test">🔔 Test</button>
+            </div>
+            <div style="font-size:13px; color:var(--muted); margin-bottom:12px"
+                 data-en="Automatic notification will come at the listed schedule time."
+                 data-hi="Schedule में listed time पर automatic notification आएगी।">
+              Automatic notification will come at the listed schedule time.
+            </div>
+            <div class="form-row">
+              <div>
+                <label class="form-label" data-en="Sound" data-hi="Sound">Sound</label>
+                <select class="inp" id="alarmSound" style="width:100%">
+                  <option value="bell">🔔 Bell</option>
+                  <option value="chime">🎵 Chime</option>
+                  <option value="beep">📢 Beep</option>
+                  <option value="motivate">💪 Motivational</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label" data-en="Alert Before" data-hi="पहले Alert">Alert Before</label>
+                <select class="inp" id="alarmBefore" style="width:100%">
+                  <option value="0"  data-en="At exact time"  data-hi="बिल्कुल उसी वक्त">At exact time</option>
+                  <option value="5" selected data-en="5 min before" data-hi="5 मिनट पहले">5 min before</option>
+                  <option value="10" data-en="10 min before" data-hi="10 मिनट पहले">10 min before</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Today Slot List -->
+        <div class="card">
+          <div style="font-family:'Syne',sans-serif; font-size:15px; font-weight:700; margin-bottom:16px"
+               data-en="📋 Today's List" data-hi="📋 आज की List">📋 Today's List</div>
+          <div id="todaySlotList">
+            <div class="empty-state">
+              <div class="icon">📝</div>
+              <p data-en="No slot yet. Add from the left!"
+                 data-hi="कोई slot नहीं। Left side से Add करो!">No slot yet. Add from the left!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── HABITS & SUBJECTS ── -->
+    <div class="page-section" id="sec-habits">
+      <div class="page-header">
+        <div class="page-title"
+             data-en="🔥 Habits & Subjects" data-hi="🔥 Habits & Subjects">🔥 Habits & Subjects</div>
+        <div class="page-sub"
+             data-en="Manage all your daily activities"
+             data-hi="Daily करने वाली चीज़ें manage करो">Manage all your daily activities</div>
+      </div>
+
+      <div class="grid2">
+        <!-- Add Habit Form -->
+        <div class="card">
+          <div style="font-family:'Syne',sans-serif; font-size:15px; font-weight:700; margin-bottom:16px"
+               data-en="➕ New Habit / Subject" data-hi="➕ नई Habit / Subject">➕ New Habit / Subject</div>
+          <div class="form-full">
+            <label class="form-label" data-en="Name" data-hi="नाम">Name</label>
+            <input class="inp" id="hName"
+                   placeholder="e.g. Physics, Morning Run, Meditation" style="width:100%">
+          </div>
+          <div class="form-row">
+            <div>
+              <label class="form-label" data-en="Category" data-hi="Category">Category</label>
+              <select class="inp" id="hCat" style="width:100%">
+                <option>📚 Study</option>
+                <option>💪 Fitness</option>
+                <option>🧘 Wellness</option>
+                <option>🎯 Skill</option>
+                <option>📖 Reading</option>
+                <option>🎨 Creative</option>
+                <option>💼 Work</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label" data-en="Daily Goal (min)" data-hi="Daily Goal (मिनट)">Daily Goal (min)</label>
+              <input class="inp" id="hGoal" type="number" value="60" min="5" max="480" style="width:100%">
+            </div>
+          </div>
+          <div class="form-full">
+            <label class="form-label" data-en="Color" data-hi="रंग">Color</label>
+            <div class="color-dots" id="colorPicker">
+              <div class="color-dot selected" style="background:#7c5cfc" data-c="#7c5cfc" onclick="pickColor(this)"></div>
+              <div class="color-dot"          style="background:#fc5c7d" data-c="#fc5c7d" onclick="pickColor(this)"></div>
+              <div class="color-dot"          style="background:#5cf0b0" data-c="#5cf0b0" onclick="pickColor(this)"></div>
+              <div class="color-dot"          style="background:#fcb85c" data-c="#fcb85c" onclick="pickColor(this)"></div>
+              <div class="color-dot"          style="background:#5cb8fc" data-c="#5cb8fc" onclick="pickColor(this)"></div>
+              <div class="color-dot"          style="background:#f05cfc" data-c="#f05cfc" onclick="pickColor(this)"></div>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="addHabit()"
+                  data-en="+ Add Habit" data-hi="+ Habit Add करें">+ Add Habit</button>
+        </div>
+
+        <!-- Habit List -->
+        <div class="card">
+          <div style="font-family:'Syne',sans-serif; font-size:15px; font-weight:700; margin-bottom:16px"
+               data-en="📋 Habit List" data-hi="📋 Habit List">📋 Habit List</div>
+          <div id="habitList">
+            <div class="empty-state">
+              <div class="icon">✨</div>
+              <p data-en="Add your first habit!" data-hi="पहली habit add करो!">Add your first habit!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Week Heatmap -->
+      <div class="card" style="margin-top:20px">
+        <div style="font-family:'Syne',sans-serif; font-size:15px; font-weight:700; margin-bottom:16px"
+             data-en="📆 This Week's Consistency" data-hi="📆 इस हफ्ते की Consistency">
+          📆 This Week's Consistency
+        </div>
+        <div id="weekHeatmap"></div>
+      </div>
+    </div>
+
+    <!-- ── ANALYTICS ── -->
+    <div class="page-section" id="sec-analytics">
+      <div class="page-header">
+        <div class="page-title"
+             data-en="📊 Growth Analytics" data-hi="📊 Growth Analytics">📊 Growth Analytics</div>
+        <div class="page-sub"
+             data-en="See how consistent you are!"
+             data-hi="देखो तुम कितने consistent हो!">See how consistent you are!</div>
+      </div>
+
+      <div class="grid3" style="margin-bottom:20px">
+        <div class="card stat-card">
+          <div class="stat-num" id="anStreak" style="color:var(--accent4)">0🔥</div>
+          <div class="stat-label" data-en="Best Streak" data-hi="Best Streak">Best Streak</div>
+        </div>
+        <div class="card stat-card">
+          <div class="stat-num" id="anMonthPct" style="color:var(--accent3)">0%</div>
+          <div class="stat-label" data-en="Month Consistency" data-hi="Month Consistency">Month Consistency</div>
+        </div>
+        <div class="card stat-card">
+          <div class="stat-num" id="anTotalHours" style="color:var(--accent)">0h</div>
+          <div class="stat-label" data-en="Total Hours Logged" data-hi="Total Hours Logged">Total Hours Logged</div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div style="font-family:'Syne',sans-serif; font-size:15px; font-weight:700; margin-bottom:12px"
+               data-en="📈 7-Day Progress" data-hi="📈 7 दिन का Progress">📈 7-Day Progress</div>
+          <canvas id="weekChart" height="180"></canvas>
+        </div>
+        <div class="card">
+          <div style="font-family:'Syne',sans-serif; font-size:15px; font-weight:700; margin-bottom:12px"
+               data-en="🎯 Habit Completion %" data-hi="🎯 Habit Completion %">🎯 Habit Completion %</div>
+          <div id="habitPieBars"></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:20px">
+        <div style="font-family:'Syne',sans-serif; font-size:15px; font-weight:700; margin-bottom:12px"
+             data-en="⏱️ Subject-wise Time (This Month)"
+             data-hi="⏱️ Subject-wise Time (इस महीने)">
+          ⏱️ Subject-wise Time (This Month)
+        </div>
+        <div id="subjectTimeBars"></div>
+      </div>
+    </div>
+
+    <!-- ── MONTHLY CALENDAR ── -->
+    <div class="page-section" id="sec-calendar">
+      <div class="page-header">
+        <div class="page-title"
+             data-en="🗓️ Monthly View" data-hi="🗓️ Monthly View">🗓️ Monthly View</div>
+        <div class="page-sub"
+             data-en="See how many days you completed"
+             data-hi="कितने दिन complete किया देखो">See how many days you completed</div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px">
+            <button class="btn btn-secondary" style="width:auto; padding:8px 14px" onclick="changeMonth(-1)">◀</button>
+            <div style="font-family:'Syne',sans-serif; font-size:16px; font-weight:700" id="calMonthLabel">April 2026</div>
+            <button class="btn btn-secondary" style="width:auto; padding:8px 14px" onclick="changeMonth(1)">▶</button>
+          </div>
+          <div class="month-grid" id="calGrid"></div>
+          <div style="display:flex; gap:12px; margin-top:16px; flex-wrap:wrap">
+            <div style="display:flex; align-items:center; gap:6px; font-size:12px">
+              <div style="width:14px; height:14px; border-radius:4px; background:var(--accent)"></div>
+              <span data-en="Full Day Done" data-hi="पूरा दिन Done">Full Day Done</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:6px; font-size:12px">
+              <div style="width:14px; height:14px; border-radius:4px; background:rgba(124,92,252,.4)"></div>
+              <span data-en="Partial" data-hi="Partial">Partial</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:6px; font-size:12px">
+              <div style="width:14px; height:14px; border-radius:4px; background:var(--surface); border:1px solid var(--border)"></div>
+              <span data-en="Missed" data-hi="Miss किया">Missed</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div style="font-family:'Syne',sans-serif; font-size:15px; font-weight:700; margin-bottom:16px"
+               data-en="📊 Month Summary" data-hi="📊 Month Summary">📊 Month Summary</div>
+          <div id="monthSummary"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SETTINGS ── -->
+    <div class="page-section" id="sec-settings">
+      <div class="page-header">
+        <div class="page-title"
+             data-en="⚙️ Settings" data-hi="⚙️ Settings">⚙️ Settings</div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <div style="font-family:'Syne',sans-serif; font-size:15px; font-weight:700; margin-bottom:16px"
+               data-en="👤 Profile" data-hi="👤 Profile">👤 Profile</div>
+          <div class="form-full">
+            <label class="form-label" data-en="Your Name" data-hi="आपका नाम">Your Name</label>
+            <input class="inp" id="settName" style="width:100%">
+          </div>
+          <div class="form-full">
+            <label class="form-label"
+                   data-en="Daily Goal % (for full day completion)"
+                   data-hi="Daily Goal % (पूरे दिन के लिए)">
+              Daily Goal % (for full day completion)
+            </label>
+            <input class="inp" id="settGoal" type="number" value="80" min="50" max="100" style="width:100%">
+          </div>
+          <button class="btn btn-primary" onclick="saveSettings()"
+                  data-en="Save ✓" data-hi="Save करें ✓">Save ✓</button>
+        </div>
+        <div class="card">
+          <div style="font-family:'Syne',sans-serif; font-size:15px; font-weight:700; margin-bottom:16px"
+               data-en="🔔 Notifications" data-hi="🔔 Notifications">🔔 Notifications</div>
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid var(--border)">
+            <div>
+              <div style="font-size:14px; font-weight:600"
+                   data-en="Browser Notifications" data-hi="Browser Notifications">Browser Notifications</div>
+              <div style="font-size:12px; color:var(--muted)"
+                   data-en="Schedule alerts in browser" data-hi="Browser में schedule alerts">Schedule alerts in browser</div>
+            </div>
+            <button class="btn btn-secondary" style="width:auto; padding:8px 16px; font-size:12px"
+                    onclick="requestNotifPerm()"
+                    data-en="Enable" data-hi="Enable करें">Enable</button>
+          </div>
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 0">
+            <div>
+              <div style="font-size:14px; font-weight:600"
+                   data-en="Sound Alerts" data-hi="Sound Alerts">Sound Alerts</div>
+              <div style="font-size:12px; color:var(--muted)"
+                   data-en="Toggle alarm sound on / off"
+                   data-hi="Alarm sound on/off करो">Toggle alarm sound on / off</div>
+            </div>
+            <div id="soundToggle" style="cursor:pointer; font-size:24px" onclick="toggleSound()">🔊</div>
+          </div>
+          <div style="margin-top:16px">
+            <button class="btn btn-secondary" onclick="clearAllData()"
+                    style="border-color:var(--accent2); color:var(--accent2)"
+                    data-en="🗑️ Clear All Data"
+                    data-hi="🗑️ सब Data Clear करें">🗑️ Clear All Data</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- NOTIFICATION BADGE -->
+<div class="notif-badge hidden" id="notifBadge">
+  <span style="font-size:24px" id="notifIcon">🔔</span>
+  <div class="notif-text">
+    <div class="notif-title" id="notifTitle">Time to Study!</div>
+    <div class="notif-body"  id="notifBody">Physics — 60 min</div>
+  </div>
+  <span class="notif-close" onclick="closeNotif()">✕</span>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// LANGUAGE SYSTEM
+// ═══════════════════════════════════════════════════════════════
+let currentLang = localStorage.getItem('rr_lang') || 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('rr_lang', lang);
+  document.getElementById('btnEn').classList.toggle('active', lang === 'en');
+  document.getElementById('btnHi').classList.toggle('active', lang === 'hi');
+  applyLang();
+}
+
+// Helper — returns English or Hindi text
+function T(en, hi) {
+  return currentLang === 'hi' ? hi : en;
+}
+
+function applyLang() {
+  // Static elements with data-en / data-hi
+  document.querySelectorAll('[data-en]').forEach(el => {
+    const val = currentLang === 'hi' ? el.dataset.hi : el.dataset.en;
+    if (val !== undefined) el.textContent = val;
+  });
+  // Select options
+  document.querySelectorAll('select option[data-en]').forEach(opt => {
+    const val = currentLang === 'hi' ? opt.dataset.hi : opt.dataset.en;
+    if (val) opt.textContent = val;
+  });
+  // Re-render dynamic sections so their text updates too
+  if (state.currentUser) {
+    renderDashboard();
+    renderToday();
+    renderHabits();
+    renderCalendar();
+    renderAnalytics();
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DATA STORE
+// ═══════════════════════════════════════════════════════════════
+let state = {
+  users: {},
+  currentUser: null,
+  soundOn: true,
+  calMonth: new Date().getMonth(),
+  calYear:  new Date().getFullYear(),
+  selectedColor: '#7c5cfc'
+};
+
+function save() {
+  localStorage.setItem('rr_state', JSON.stringify(state));
+}
+function load() {
+  const d = localStorage.getItem('rr_state');
+  if (d) state = { ...state, ...JSON.parse(d) };
+}
+load();
+
+function cur() {
+  return state.users[state.currentUser];
+}
+
+// ═══════════════════════════════════════════════════════════════
+// QUOTES  (EN + HI)
+// ═══════════════════════════════════════════════════════════════
+const QUOTES_EN = [
+  { t: '"Small steps daily build the greatest journeys."',              a: '— Chanakya' },
+  { t: '"Discipline is the bridge between goals and accomplishment."',  a: '— Jim Rohn' },
+  { t: '"We are what we repeatedly do."',                               a: '— Aristotle' },
+  { t: '"Success is the sum of small efforts, repeated day in and day out."', a: '— Robert Collier' },
+  { t: '"Every morning is a new opportunity."',                         a: '— Unknown' },
+  { t: '"Push yourself, because no one else is going to do it for you."', a: '— Unknown' },
+];
+const QUOTES_HI = [
+  { t: '"छोटे-छोटे कदम ही बड़ी यात्रा बनाते हैं।"',                a: '— Chanakya' },
+  { t: '"Discipline ही goals और achievement के बीच का पुल है।"',     a: '— Jim Rohn' },
+  { t: '"हम वही हैं जो हम बार-बार करते हैं।"',                      a: '— Aristotle' },
+  { t: '"मेहनत आज करो, आराम जिंदगी भर।"',                           a: '— Unknown' },
+  { t: '"हर सुबह एक नया मौका है।"',                                  a: '— Unknown' },
+  { t: '"खुद को push करो, क्योंकि कोई और नहीं करेगा।"',             a: '— Unknown' },
+];
+
+// ═══════════════════════════════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════════════════════════════
+function showRegister() {
+  document.getElementById('loginForm').classList.add('hidden');
+  document.getElementById('registerForm').classList.remove('hidden');
+}
+function showLogin() {
+  document.getElementById('registerForm').classList.add('hidden');
+  document.getElementById('loginForm').classList.remove('hidden');
+}
+
+function doLogin() {
+  const u   = document.getElementById('loginUser').value.trim();
+  const p   = document.getElementById('loginPass').value;
+  const err = document.getElementById('loginErr');
+  if (!state.users[u] || state.users[u].pass !== btoa(p)) {
+    err.classList.remove('hidden');
+    return;
+  }
+  err.classList.add('hidden');
+  state.currentUser = u;
+  save();
+  launchApp();
+}
+
+function doRegister() {
+  const name  = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const pass  = document.getElementById('regPass').value;
+  const err   = document.getElementById('regErr');
+  if (!name || !email || pass.length < 6) {
+    err.textContent = T('❌ Fill all fields (password min 6 chars)', '❌ सब fields सही से भरो (password 6+ chars)');
+    err.classList.remove('hidden');
+    return;
+  }
+  if (state.users[email]) {
+    err.textContent = T('❌ Email already registered', '❌ Email पहले से registered है');
+    err.classList.remove('hidden');
+    return;
+  }
+  err.classList.add('hidden');
+  state.users[email] = {
+    name,
+    pass: btoa(pass),
+    habits: [],
+    slots: [],
+    completions: {},   // { 'YYYY-MM-DD': { habitId: minutesDone } }
+    settings: { dailyGoalPct: 80 }
+  };
+  state.currentUser = email;
+  save();
+  launchApp();
+}
+
+function doLogout() {
+  state.currentUser = null;
+  save();
+  document.getElementById('app').style.display       = 'none';
+  document.getElementById('loginPage').style.display = 'flex';
+}
+
+function launchApp() {
+  document.getElementById('loginPage').style.display = 'none';
+  document.getElementById('app').style.display       = 'block';
+  initApp();
+}
+
+// Auto-login if session exists
+if (state.currentUser && state.users[state.currentUser]) {
+  document.getElementById('loginPage').style.display = 'none';
+  document.getElementById('app').style.display       = 'block';
+  setTimeout(initApp, 50);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// APP INIT
+// ═══════════════════════════════════════════════════════════════
+function initApp() {
+  applyLang();
+  updateSidebar();
+  startClock();
+  renderDashboard();
+  renderToday();
+  renderHabits();
+  renderCalendar();
+  renderAnalytics();
+  loadSettings();
+  scheduleAlarmCheck();
+  requestNotifPerm();
+}
+
+function updateSidebar() {
+  const u = cur();
+  if (!u) return;
+  document.getElementById('sidebarName').textContent   = u.name.split(' ')[0];
+  document.getElementById('dashName').textContent       = u.name.split(' ')[0];
+  document.getElementById('sidebarAvatar').textContent  = u.name[0].toUpperCase();
+  document.getElementById('sidebarStreak').textContent  = calcStreak();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// LIVE CLOCK
+// ═══════════════════════════════════════════════════════════════
+function startClock() {
+  function tick() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    const s = String(now.getSeconds()).padStart(2, '0');
+    const el = document.getElementById('liveClock');
+    if (el) el.textContent = `${h}:${m}:${s}`;
+
+    const DAYS_EN   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const DAYS_HI   = ['रविवार','सोमवार','मंगलवार','बुधवार','गुरुवार','शुक्रवार','शनिवार'];
+    const MONTHS_EN = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const MONTHS_HI = ['जनवरी','फरवरी','मार्च','अप्रैल','मई','जून','जुलाई','अगस्त','सितंबर','अक्टूबर','नवंबर','दिसंबर'];
+    const dEl = document.getElementById('liveDate');
+    if (dEl) {
+      if (currentLang === 'hi') {
+        dEl.textContent = `${DAYS_HI[now.getDay()]}, ${now.getDate()} ${MONTHS_HI[now.getMonth()]} ${now.getFullYear()}`;
+      } else {
+        dEl.textContent = `${DAYS_EN[now.getDay()]}, ${now.getDate()} ${MONTHS_EN[now.getMonth()]} ${now.getFullYear()}`;
+      }
+    }
+    updateNextAlert();
+  }
+  tick();
+  setInterval(tick, 1000);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════════
+function goTo(page) {
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('sec-' + page).classList.add('active');
+
+  const pages    = ['dashboard', 'today', 'habits', 'analytics', 'calendar', 'settings'];
+  const navItems = document.querySelectorAll('.nav-item');
+  const idx      = pages.indexOf(page);
+  if (navItems[idx]) navItems[idx].classList.add('active');
+
+  if (page === 'analytics') { setTimeout(renderCharts, 100); }
+  if (page === 'calendar')  { renderCalendar(); }
+  if (page === 'dashboard') { renderDashboard(); }
+  closeSidebar();
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+function closeSidebar() {
+  if (window.innerWidth <= 680) document.getElementById('sidebar').classList.remove('open');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// HABITS
+// ═══════════════════════════════════════════════════════════════
+function pickColor(el) {
+  document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
+  state.selectedColor = el.dataset.c;
+}
+
+function addHabit() {
+  const name = document.getElementById('hName').value.trim();
+  const cat  = document.getElementById('hCat').value;
+  const goal = parseInt(document.getElementById('hGoal').value) || 60;
+  if (!name) {
+    return showNotif('❗', T('Name is empty!', 'Name empty!'), T('Write the habit name', 'Habit का नाम लिखो'));
+  }
+  const u = cur();
+  u.habits.push({
+    id:    Date.now(),
+    name,
+    cat,
+    goal,
+    color: state.selectedColor
+  });
+  save();
+  document.getElementById('hName').value = '';
+  renderHabits();
+  renderToday();
+  renderDashboard();
+  showNotif('✅', T('Habit Added!', 'Habit Added!'), `"${name}" ${T('added successfully', 'add हो गई')}`);
+}
+
+function renderHabits() {
+  const u  = cur();
+  if (!u) return;
+  const el = document.getElementById('habitList');
+  if (!u.habits.length) {
+    el.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">✨</div>
+        <p>${T('Add your first habit!', 'पहली habit add करो!')}</p>
+      </div>`;
+  } else {
+    el.innerHTML = u.habits.map(h => `
+      <div style="display:flex; align-items:center; gap:12px; padding:12px;
+                  background:var(--surface); border:1px solid var(--border);
+                  border-radius:12px; margin-bottom:8px">
+        <div style="width:14px; height:14px; border-radius:50%; background:${h.color}; flex-shrink:0"></div>
+        <div style="flex:1">
+          <div style="font-size:14px; font-weight:600">${h.name}</div>
+          <div style="font-size:12px; color:var(--muted)">${h.cat} · ${h.goal} min/${T('day', 'दिन')}</div>
+        </div>
+        <div style="display:flex; gap:6px">
+          <button onclick="logTime(${h.id})"
+                  style="background:rgba(92,240,176,.15); border:1px solid rgba(92,240,176,.3);
+                         color:#5cf0b0; border-radius:8px; padding:5px 10px;
+                         cursor:pointer; font-size:12px">
+            +${T('Log', 'Log')}
+          </button>
+          <button onclick="deleteHabit(${h.id})"
+                  style="background:rgba(252,92,125,.1); border:1px solid rgba(252,92,125,.2);
+                         color:var(--accent2); border-radius:8px; padding:5px 10px;
+                         cursor:pointer; font-size:12px">✕</button>
+        </div>
+      </div>`).join('');
+  }
+
+  // Refresh slot dropdown
+  const sel = document.getElementById('slotHabit');
+  if (sel) {
+    sel.innerHTML =
+      `<option value="">${T('— Select —', '— चुनो —')}</option>` +
+      u.habits.map(h => `<option value="${h.id}">${h.name}</option>`).join('');
+  }
+  renderWeekHeatmap();
+}
+
+function deleteHabit(id) {
+  const u = cur();
+  u.habits = u.habits.filter(h => h.id !== id);
+  u.slots  = u.slots.filter(s => s.habitId != id);
+  save();
+  renderHabits();
+  renderToday();
+  renderDashboard();
+}
+
+function logTime(habitId) {
+  const mins = prompt(T('How many minutes did you do today?', 'कितने minutes किया? (आज के लिए)'));
+  if (!mins || isNaN(mins)) return;
+  const today = todayKey();
+  const u     = cur();
+  if (!u.completions[today]) u.completions[today] = {};
+  u.completions[today][habitId] = (u.completions[today][habitId] || 0) + parseInt(mins);
+  save();
+  renderDashboard();
+  renderHabits();
+  renderAnalytics();
+  showNotif('✅', T('Time Logged!', 'Time Logged!'), `${mins} ${T('min logged!', 'min logged!')}`);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SCHEDULE SLOTS
+// ═══════════════════════════════════════════════════════════════
+function addSlot() {
+  const habitId = document.getElementById('slotHabit').value;
+  const time    = document.getElementById('slotTime').value;
+  const dur     = parseInt(document.getElementById('slotDur').value) || 60;
+  const days    = document.getElementById('slotDays').value;
+  if (!habitId) {
+    return showNotif('❗', T('Select a Habit', 'Habit Select करो'), '');
+  }
+  const u = cur();
+  u.slots.push({
+    id:        Date.now(),
+    habitId:   parseInt(habitId),
+    time,
+    dur,
+    days,
+    addedDate: todayKey()
+  });
+  u.slots.sort((a, b) => a.time.localeCompare(b.time));
+  save();
+  renderToday();
+  renderDashboard();
+  showNotif('✅', T('Slot Added!', 'Slot Added!'), `${time} ${T('slot scheduled', 'slot schedule हो गया')}`);
+}
+
+function getHabit(id) {
+  const u = cur();
+  return u.habits.find(h => h.id == id) || { name: 'Unknown', color: '#7c5cfc' };
+}
+
+function todaySlots() {
+  const u = cur();
+  if (!u) return [];
+  const dow = new Date().getDay(); // 0 = Sunday
+  return u.slots.filter(s => {
+    if (s.days === 'all')     return true;
+    if (s.days === 'weekday') return dow >= 1 && dow <= 5;
+    if (s.days === 'weekend') return dow === 0 || dow === 6;
+    if (s.days === 'today')   return s.addedDate === todayKey();
+    return true;
+  });
+}
+
+function renderToday() {
+  const u     = cur();
+  if (!u) return;
+  const today = todayKey();
+  const slots = todaySlots();
+  const el    = document.getElementById('todaySlotList');
+  const now   = new Date();
+  const nowMins = now.getHours() * 60 + now.getMinutes();
+
+  const dateEl = document.getElementById('todayDateLabel');
+  if (dateEl) dateEl.textContent = now.toDateString();
+
+  if (!slots.length) {
+    el.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">📝</div>
+        <p>${T('No slot yet. Add from the left!', 'Left side से slots add करो!')}</p>
+      </div>`;
+    return;
+  }
+
+  el.innerHTML = slots.map(s => {
+    const h          = getHabit(s.habitId);
+    const [sh, sm]   = s.time.split(':').map(Number);
+    const slotMins   = sh * 60 + sm;
+    const isActive   = nowMins >= slotMins && nowMins < slotMins + s.dur;
+    const isDone     = (u.completions[today]?.[s.habitId] || 0) >= s.dur * 0.8;
+    return `
+      <div class="schedule-item ${isActive ? 'active-slot' : ''} ${isDone ? 'done' : ''}"
+           onclick="toggleSlotDone(${s.id}, ${s.habitId}, ${s.dur})">
+        <div class="slot-dot"
+             style="background:${h.color}${isActive ? '; box-shadow:0 0 8px ' + h.color : ''}"></div>
+        <div class="slot-time">${s.time}</div>
+        <div class="slot-name">${h.name}${isActive ? ' 🔴 ' + T('LIVE','LIVE') : ''}</div>
+        <div class="slot-dur">${s.dur}m</div>
+        <div class="slot-check">${isDone ? '✓' : ''}</div>
+        <span onclick="event.stopPropagation(); deleteSlot(${s.id})"
+              style="color:var(--muted); cursor:pointer; font-size:16px; margin-left:4px">✕</span>
+      </div>`;
+  }).join('');
+}
+
+function toggleSlotDone(slotId, habitId, dur) {
+  const today = todayKey();
+  const u     = cur();
+  if (!u.completions[today]) u.completions[today] = {};
+  const current = u.completions[today][habitId] || 0;
+  u.completions[today][habitId] = current >= dur * 0.8 ? 0 : dur;
+  save();
+  renderToday();
+  renderDashboard();
+}
+
+function deleteSlot(id) {
+  cur().slots = cur().slots.filter(s => s.id !== id);
+  save();
+  renderToday();
+  renderDashboard();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════════════════
+function renderDashboard() {
+  const u = cur();
+  if (!u) return;
+  const today = todayKey();
+
+  // Quote
+  const QUOTES = currentLang === 'hi' ? QUOTES_HI : QUOTES_EN;
+  const q      = QUOTES[Math.floor(Date.now() / 86400000) % QUOTES.length];
+  const qEl    = document.getElementById('quoteText');
+  if (qEl) qEl.textContent = q.t;
+  const qAEl = document.getElementById('quoteAuthor');
+  if (qAEl) qAEl.textContent = q.a;
+
+  // Tip
+  const tipEl = document.getElementById('dashTip');
+  if (tipEl) {
+    tipEl.innerHTML = `💡 <strong>Tip:</strong> ${
+      T('Schedule your hardest subject in the morning — your brain is freshest then!',
+        'सबसे hard subject को सुबह schedule करो — brain तब fresh होता है!')}`;
+  }
+
+  // Stats
+  const pct   = dayCompletionPct(today);
+  const tEl   = document.getElementById('statToday');
+  if (tEl) tEl.textContent = Math.round(pct) + '%';
+
+  const streak = calcStreak();
+  const sEl    = document.getElementById('statStreak');
+  if (sEl) sEl.textContent = streak + '🔥';
+  document.getElementById('sidebarStreak').textContent = streak;
+
+  const mPct = calcMonthConsistency();
+  const mEl  = document.getElementById('statConsistency');
+  if (mEl) mEl.textContent = Math.round(mPct) + '%';
+
+  const hEl = document.getElementById('statHabits');
+  if (hEl) hEl.textContent = u.habits.length;
+
+  // Habit progress bars
+  const barsEl = document.getElementById('dashHabitBars');
+  if (barsEl) {
+    if (!u.habits.length) {
+      barsEl.innerHTML = `
+        <div class="empty-state">
+          <div class="icon">➕</div>
+          <p>${T('Add Habits → go to "Habits &amp; Subjects"',
+                 'Habits add करो → "Habits &amp; Subjects" में जाओ')}</p>
+        </div>`;
+    } else {
+      barsEl.innerHTML = u.habits.map(h => {
+        const done = u.completions[today]?.[h.id] || 0;
+        const p    = Math.min(100, Math.round(done / h.goal * 100));
+        return `
+          <div class="progress-wrap">
+            <div class="progress-top">
+              <span class="progress-name">${h.cat.split(' ')[0]} ${h.name}</span>
+              <span class="progress-pct">${done}/${h.goal} min</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" style="width:${p}%; background:${h.color}"></div>
+            </div>
+            <div class="progress-time">${p}% ${T('complete', 'complete')}</div>
+          </div>`;
+      }).join('');
+    }
+  }
+
+  // Next upcoming slots
+  const nextEl = document.getElementById('dashNextSlots');
+  if (nextEl) {
+    const now2    = new Date();
+    const nowMins = now2.getHours() * 60 + now2.getMinutes();
+    const upcoming = todaySlots().filter(s => {
+      const [sh, sm] = s.time.split(':').map(Number);
+      return (sh * 60 + sm) >= nowMins - 30;
+    }).slice(0, 3);
+
+    if (!upcoming.length) {
+      nextEl.innerHTML = `
+        <div style="color:var(--muted); font-size:13px; text-align:center; padding:20px">
+          ${T("Today's schedule done! 🎉", "आज का schedule done! 🎉")}
+        </div>`;
+    } else {
+      nextEl.innerHTML = upcoming.map(s => {
+        const h = getHabit(s.habitId);
+        return `
+          <div style="display:flex; align-items:center; gap:10px; padding:10px;
+                      background:var(--surface); border-radius:10px; margin-bottom:8px">
+            <div style="width:10px; height:10px; border-radius:50%; background:${h.color}"></div>
+            <span style="font-size:13px; font-weight:600">${h.name}</span>
+            <span style="margin-left:auto; font-size:12px; color:var(--muted)">${s.time} · ${s.dur}m</span>
+          </div>`;
+      }).join('');
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ANALYTICS
+// ═══════════════════════════════════════════════════════════════
+function renderAnalytics() {
+  const u = cur();
+  if (!u) return;
+
+  const streak  = calcStreak();
+  const anS = document.getElementById('anStreak');
+  if (anS) anS.textContent = streak + '🔥';
+
+  const mPct = calcMonthConsistency();
+  const anM  = document.getElementById('anMonthPct');
+  if (anM) anM.textContent = Math.round(mPct) + '%';
+
+  // Total hours
+  let totalMins = 0;
+  Object.values(u.completions).forEach(day => {
+    Object.values(day).forEach(m => { totalMins += m; });
+  });
+  const anH = document.getElementById('anTotalHours');
+  if (anH) anH.textContent = Math.round(totalMins / 60) + 'h';
+
+  renderHabitPieBars();
+  renderSubjectTimeBars();
+}
+
+function renderCharts() {
+  drawWeekChart();
+  renderHabitPieBars();
+  renderSubjectTimeBars();
+}
+
+function drawWeekChart() {
+  const canvas = document.getElementById('weekChart');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const u   = cur();
+
+  const DAYS_EN = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+  const DAYS_HI = ['रवि','सोम','मंगल','बुध','गुरु','शुक्र','शनि'];
+  const dayLabels = currentLang === 'hi' ? DAYS_HI : DAYS_EN;
+
+  const days   = [];
+  const labels = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    days.push(Math.round(dayCompletionPct(dateKey(d))));
+    labels.push(dayLabels[d.getDay()]);
+  }
+
+  const w  = canvas.offsetWidth || 400;
+  const h  = 180;
+  canvas.width  = w;
+  canvas.height = h;
+  ctx.clearRect(0, 0, w, h);
+
+  const pad = 30;
+  const bw  = (w - pad * 2) / 7 - 4;
+  days.forEach((v, i) => {
+    const x  = pad + i * ((w - pad * 2) / 7);
+    const bh = (v / 100) * (h - 60);
+    const grad = ctx.createLinearGradient(0, h - bh - 20, 0, h - 20);
+    grad.addColorStop(0, '#7c5cfc');
+    grad.addColorStop(1, 'rgba(124,92,252,.2)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.roundRect(x, h - bh - 20, bw, bh, 4);
+    ctx.fill();
+    ctx.fillStyle = '#7070a0';
+    ctx.font = '11px DM Sans';
+    ctx.textAlign = 'center';
+    ctx.fillText(labels[i], x + bw / 2, h - 4);
+    if (v > 0) {
+      ctx.fillStyle = '#f0f0f8';
+      ctx.fillText(v + '%', x + bw / 2, h - bh - 25);
+    }
+  });
+}
+
+function renderHabitPieBars() {
+  const u  = cur();
+  if (!u) return;
+  const el = document.getElementById('habitPieBars');
+  if (!el) return;
+  if (!u.habits.length) {
+    el.innerHTML = `<div class="empty-state"><div class="icon">📊</div><p>${T('Add habits first', 'Habits add करो')}</p></div>`;
+    return;
+  }
+  const today = todayKey();
+  el.innerHTML = u.habits.map(h => {
+    const done = u.completions[today]?.[h.id] || 0;
+    const p    = Math.min(100, Math.round(done / h.goal * 100));
+    return `
+      <div class="progress-wrap">
+        <div class="progress-top">
+          <span class="progress-name">${h.name}</span>
+          <span class="progress-pct">${p}%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:${p}%; background:${h.color}"></div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function renderSubjectTimeBars() {
+  const u  = cur();
+  if (!u) return;
+  const el = document.getElementById('subjectTimeBars');
+  if (!el) return;
+  if (!u.habits.length) {
+    el.innerHTML = `<div class="empty-state"><div class="icon">⏱️</div><p>${T('No data yet', 'No data yet')}</p></div>`;
+    return;
+  }
+  const monthTotals = {};
+  u.habits.forEach(h => { monthTotals[h.id] = 0; });
+  const now = new Date();
+  Object.entries(u.completions).forEach(([k, v]) => {
+    const d = new Date(k);
+    if (d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()) {
+      Object.entries(v).forEach(([hid, m]) => {
+        if (monthTotals[hid] !== undefined) monthTotals[hid] += m;
+      });
+    }
+  });
+  const maxVal = Math.max(...Object.values(monthTotals), 1);
+  el.innerHTML = u.habits.map(h => {
+    const mins = monthTotals[h.id] || 0;
+    const p    = Math.round(mins / maxVal * 100);
+    return `
+      <div class="progress-wrap">
+        <div class="progress-top">
+          <span class="progress-name">${h.name}</span>
+          <span class="progress-pct">${Math.round(mins / 60)}h ${mins % 60}m</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:${p}%; background:${h.color}"></div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// WEEK HEATMAP
+// ═══════════════════════════════════════════════════════════════
+function renderWeekHeatmap() {
+  const u  = cur();
+  if (!u) return;
+  const el = document.getElementById('weekHeatmap');
+  if (!el) return;
+  if (!u.habits.length) { el.innerHTML = ''; return; }
+
+  const DAYS_EN = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+  const DAYS_HI = ['रवि','सोम','मंगल','बुध','गुरु','शुक्र','शनि'];
+  const dayLabels = currentLang === 'hi' ? DAYS_HI : DAYS_EN;
+
+  el.innerHTML = u.habits.map(h => {
+    const cells = [];
+    for (let i = 6; i >= 0; i--) {
+      const d    = new Date();
+      d.setDate(d.getDate() - i);
+      const k    = dateKey(d);
+      const done = u.completions[k]?.[h.id] || 0;
+      const pct  = Math.min(100, done / h.goal * 100);
+      const cls  = pct >= 80 ? 'done' : pct > 0 ? 'partial' : '';
+      cells.push(`<div class="habit-day-cell ${cls}" title="${dayLabels[d.getDay()]} ${Math.round(pct)}%">${dayLabels[d.getDay()]}</div>`);
+    }
+    return `
+      <div style="margin-bottom:12px">
+        <div style="font-size:13px; font-weight:600; margin-bottom:6px;
+                    display:flex; align-items:center; gap:8px">
+          <div style="width:10px; height:10px; border-radius:50%; background:${h.color}"></div>
+          ${h.name}
+        </div>
+        <div class="habit-week-grid">${cells.join('')}</div>
+      </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CALENDAR
+// ═══════════════════════════════════════════════════════════════
+function renderCalendar() {
+  const el = document.getElementById('calGrid');
+  if (!el) return;
+  const u  = cur();
+  if (!u) return;
+
+  const y = state.calYear;
+  const m = state.calMonth;
+
+  const MONTHS_EN = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const MONTHS_HI = ['जनवरी','फरवरी','मार्च','अप्रैल','मई','जून','जुलाई','अगस्त','सितंबर','अक्टूबर','नवंबर','दिसंबर'];
+  const DAYH_EN   = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+  const DAYH_HI   = ['रवि','सोम','मंगल','बुध','गुरु','शुक्र','शनि'];
+
+  const monthLabel = currentLang === 'hi' ? MONTHS_HI : MONTHS_EN;
+  const dayHeader  = currentLang === 'hi' ? DAYH_HI   : DAYH_EN;
+
+  document.getElementById('calMonthLabel').textContent = `${monthLabel[m]} ${y}`;
+
+  const first = new Date(y, m, 1).getDay();
+  const days  = new Date(y, m + 1, 0).getDate();
+  const today = new Date();
+
+  let html = dayHeader.map(d => `<div class="month-day header">${d}</div>`).join('');
+  for (let i = 0; i < first; i++) html += `<div class="month-day"></div>`;
+
+  for (let d = 1; d <= days; d++) {
+    const date    = new Date(y, m, d);
+    const k       = dateKey(date);
+    const pct     = dayCompletionPct(k);
+    const isFuture = date > today;
+    const isToday  = date.toDateString() === today.toDateString();
+    const cls = isFuture ? 'empty' : pct >= 80 ? 'full' : pct > 0 ? 'filled' : '';
+    html += `<div class="month-day ${cls} ${isToday ? 'today-mark' : ''}"
+                  title="${k}: ${Math.round(pct)}%">${d}</div>`;
+  }
+  el.innerHTML = html;
+  renderMonthSummary(y, m);
+}
+
+function changeMonth(dir) {
+  state.calMonth += dir;
+  if (state.calMonth < 0)  { state.calMonth = 11; state.calYear--; }
+  if (state.calMonth > 11) { state.calMonth = 0;  state.calYear++; }
+  renderCalendar();
+}
+
+function renderMonthSummary(y, m) {
+  const u  = cur();
+  if (!u) return;
+  const el = document.getElementById('monthSummary');
+  if (!el) return;
+
+  const totalDays = new Date(y, m + 1, 0).getDate();
+  let full = 0, partial = 0, missed = 0;
+
+  for (let d = 1; d <= totalDays; d++) {
+    const date = new Date(y, m, d);
+    if (date > new Date()) break;
+    const pct = dayCompletionPct(dateKey(date));
+    if      (pct >= 80) full++;
+    else if (pct >   0) partial++;
+    else                missed++;
+  }
+
+  const total = full + partial + missed || 1;
+  el.innerHTML = `
+    <div style="display:flex; flex-direction:column; gap:12px">
+      <div class="progress-wrap">
+        <div class="progress-top">
+          <span class="progress-name">✅ ${T('Full Days', 'Full Days')}</span>
+          <span class="progress-pct">${full} ${T('days', 'दिन')}</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:${full / total * 100}%; background:var(--accent)"></div>
+        </div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-top">
+          <span class="progress-name">🔶 ${T('Partial Days', 'Partial Days')}</span>
+          <span class="progress-pct">${partial} ${T('days', 'दिन')}</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:${partial / total * 100}%; background:var(--accent4)"></div>
+        </div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-top">
+          <span class="progress-name">❌ ${T('Missed Days', 'Miss किए दिन')}</span>
+          <span class="progress-pct">${missed} ${T('days', 'दिन')}</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:${missed / total * 100}%; background:var(--accent2)"></div>
+        </div>
+      </div>
+      <div style="background:var(--surface); border-radius:12px; padding:16px;
+                  text-align:center; margin-top:8px">
+        <div style="font-family:'Syne',sans-serif; font-size:32px; font-weight:800;
+                    color:var(--accent3)">${Math.round(full / total * 100)}%</div>
+        <div style="font-size:13px; color:var(--muted)">${T('Month Consistency', 'Month Consistency')}</div>
+      </div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// UTILITY FUNCTIONS
+// ═══════════════════════════════════════════════════════════════
+function todayKey() {
+  return dateKey(new Date());
+}
+function dateKey(d) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function dayCompletionPct(dateStr) {
+  const u = cur();
+  if (!u || !u.habits.length) return 0;
+  let total = 0;
+  let done  = 0;
+  u.habits.forEach(h => {
+    total += h.goal;
+    done  += Math.min(h.goal, u.completions[dateStr]?.[h.id] || 0);
+  });
+  return total ? (done / total * 100) : 0;
+}
+
+function calcStreak() {
+  const u = cur();
+  if (!u) return 0;
+  let streak = 0;
+  const d    = new Date();
+  while (true) {
+    const k   = dateKey(d);
+    const pct = dayCompletionPct(k);
+    if (pct >= (u.settings?.dailyGoalPct || 80)) {
+      streak++;
+    } else if (dateKey(d) !== todayKey()) {
+      break;
+    }
+    d.setDate(d.getDate() - 1);
+    if (streak > 365) break;
+  }
+  return streak;
+}
+
+function calcMonthConsistency() {
+  const u   = cur();
+  if (!u) return 0;
+  const now = new Date();
+  let count = 0;
+  let done  = 0;
+  for (let d = 1; d <= now.getDate(); d++) {
+    const date = new Date(now.getFullYear(), now.getMonth(), d);
+    count++;
+    if (dayCompletionPct(dateKey(date)) >= (u.settings?.dailyGoalPct || 80)) done++;
+  }
+  return count ? (done / count * 100) : 0;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// NOTIFICATIONS & ALARMS
+// ═══════════════════════════════════════════════════════════════
+let lastAlerted = {};
+
+function scheduleAlarmCheck() {
+  setInterval(checkAlarms, 30000);
+  checkAlarms();
+}
+
+function checkAlarms() {
+  const u = cur();
+  if (!u) return;
+  const now     = new Date();
+  const nowMins = now.getHours() * 60 + now.getMinutes();
+  const before  = parseInt(document.getElementById('alarmBefore')?.value || 5);
+
+  todaySlots().forEach(s => {
+    const [sh, sm]    = s.time.split(':').map(Number);
+    const slotMins    = sh * 60 + sm;
+    const alertMins   = slotMins - before;
+    const alertKey    = s.id + '_' + dateKey(now);
+    if (nowMins >= alertMins && nowMins <= alertMins + 1 && !lastAlerted[alertKey]) {
+      lastAlerted[alertKey] = true;
+      const h = getHabit(s.habitId);
+      triggerAlarm(h.name, s.time, s.dur);
+    }
+  });
+}
+
+function triggerAlarm(habitName, time, dur) {
+  showNotif(
+    '⏰',
+    `${T('Time for', 'Time:')} ${habitName}!`,
+    `${T('Start now —', 'अभी शुरू करो —')} ${dur} min`
+  );
+  playAlarmSound();
+  if (Notification.permission === 'granted') {
+    new Notification(`⏰ ${habitName}!`, {
+      body: `${T('Start now —', 'अभी शुरू करो —')} ${dur} min`,
+      icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🚀</text></svg>'
+    });
+  }
+}
+
+function requestNotifPerm() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
+
+function testAlarm() {
+  triggerAlarm(T('Test Habit', 'Test Habit'), T('Now', 'अभी'), 30);
+}
+
+// Web Audio API for sounds
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playAlarmSound() {
+  if (!state.soundOn) return;
+  try {
+    const ac    = getAudioCtx();
+    const sound = document.getElementById('alarmSound')?.value || 'bell';
+    const notes =
+      sound === 'bell'     ? [523, 659, 784, 1047] :
+      sound === 'chime'    ? [880, 1100, 1320]      :
+      sound === 'motivate' ? [523, 659, 784, 1047, 1319] :
+                             [880];
+    notes.forEach((freq, i) => {
+      const osc  = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.connect(gain);
+      gain.connect(ac.destination);
+      osc.type          = sound === 'beep' ? 'square' : 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, ac.currentTime + i * 0.15);
+      gain.gain.linearRampToValueAtTime(0.3, ac.currentTime + i * 0.15 + 0.05);
+      gain.gain.linearRampToValueAtTime(0,   ac.currentTime + i * 0.15 + 0.3);
+      osc.start(ac.currentTime + i * 0.15);
+      osc.stop( ac.currentTime + i * 0.15 + 0.4);
+    });
+  } catch (e) {}
+}
+
+function toggleSound() {
+  state.soundOn = !state.soundOn;
+  document.getElementById('soundToggle').textContent = state.soundOn ? '🔊' : '🔇';
+  save();
+}
+
+function updateNextAlert() {
+  const u = cur();
+  if (!u) return;
+  const el = document.getElementById('nextAlertBadge');
+  if (!el) return;
+  const now     = new Date();
+  const nowMins = now.getHours() * 60 + now.getMinutes();
+  const upcoming = todaySlots().filter(s => {
+    const [sh, sm] = s.time.split(':').map(Number);
+    return sh * 60 + sm > nowMins;
+  });
+  if (upcoming.length) {
+    const next = upcoming[0];
+    const h    = getHabit(next.habitId);
+    el.textContent = `⏰ ${T('Next:', 'Next:')} ${h.name} ${T('at', 'बजे')} ${next.time}`;
+  } else {
+    el.textContent = '';
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// NOTIFICATION BADGE (IN-APP)
+// ═══════════════════════════════════════════════════════════════
+let notifTimer = null;
+
+function showNotif(icon, title, body) {
+  document.getElementById('notifIcon').textContent  = icon;
+  document.getElementById('notifTitle').textContent = title;
+  document.getElementById('notifBody').textContent  = body;
+  const el = document.getElementById('notifBadge');
+  el.classList.remove('hidden');
+  clearTimeout(notifTimer);
+  notifTimer = setTimeout(closeNotif, 4000);
+}
+function closeNotif() {
+  document.getElementById('notifBadge').classList.add('hidden');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SETTINGS
+// ═══════════════════════════════════════════════════════════════
+function loadSettings() {
+  const u = cur();
+  if (!u) return;
+  const nameEl = document.getElementById('settName');
+  if (nameEl) nameEl.value = u.name;
+  const goalEl = document.getElementById('settGoal');
+  if (goalEl) goalEl.value = u.settings?.dailyGoalPct || 80;
+}
+
+function saveSettings() {
+  const u = cur();
+  if (!u) return;
+  u.name = document.getElementById('settName').value || u.name;
+  if (!u.settings) u.settings = {};
+  u.settings.dailyGoalPct = parseInt(document.getElementById('settGoal').value) || 80;
+  save();
+  updateSidebar();
+  renderDashboard();
+  showNotif('✅', T('Settings Saved!', 'Settings Save हो गई!'), '');
+}
+
+function clearAllData() {
+  if (!confirm(T('Really delete everything? This cannot be undone.',
+                 'सच में सब delete करें? यह undo नहीं होगा।'))) return;
+  const u = cur();
+  u.habits      = [];
+  u.slots       = [];
+  u.completions = {};
+  save();
+  initApp();
+  showNotif('🗑️', T('Data Cleared', 'Data Clear हो गया'), T('Fresh start!', 'Fresh start!'));
+}
+
+// ── Apply language on first load ──
+setLang(currentLang);
+</script>
+</body>
+</html>
